@@ -1,32 +1,47 @@
-<h1>Simple Angular Test</h1>
-<form>
-  <div>
-    <div>
+<form (ngSubmit)='onSubmit(contactForm.form.valid)' #contactForm="ngForm">
+  <h1>Simple Angular Test</h1>
+    <div class='inputRow'>
       <label>Title</label>
-      <select>
-        <option value="">-- Select an option --</option>
-        <!--TODO: add titles to dropdown-->
+      <select [(ngModel)]='model.title' name='title'>
+        <option disabled value=''>-- Select an option --</option>
+        <option *ngFor='let title of titleList' [value]='title.name'>{{title.name}}</option>
       </select>
     </div>
-    <div>
-      <label>First Name</label>
-      <input type="text" placeholder="First name" />
+    <div class='inputRow'>
+      <label for='firstName'>First Name</label>
+      <input [(ngModel)]='model.firstName'
+             type='text'
+             placeholder='First name'
+             name='firstName'
+             #firstName='ngModel' />
     </div>
-    <div>
-      <label>Last Name</label>
-      <input type="text" placeholder="Last name" />
+    <div class='inputRow'>
+      <label for='lastName'>Last Name</label>
+      <input [(ngModel)]='model.lastName'
+             type='text' placeholder='Last name'
+             name='lastName'
+             required
+             #lastName='ngModel' />
     </div>
-    <div>
-        <label>Email</label>
-        <input type="email" placeholder="Email" />
+    <div class='inputRow'>
+      <label for='email'>Email</label>
+      <input [(ngModel)]='model.email'
+             type='email'
+             placeholder='Email'
+             name='email'
+             required
+             pattern='^[A-z0-9._%+-]+@[A-z0-9.-]+\.com'
+             #email='ngModel' />
     </div>
     <span></span>
-    <div>
-      <input type="checkbox" />
-      <label>I accept the terms & conditions</label>
+    <div class='acceptTerms'>
+      <input type='checkbox' [(ngModel)]='model.acceptTerms' name='acceptTerms' required />
+      <label for='acceptTerms'>I accept the terms & conditions</label>
     </div>
     <div>
-      <button>Submit</button>
+      <button type='submit' [ngClass]="!contactForm.form.valid ? 'button-disabled': ''">Submit</button>
     </div>
-  </div>
+    <div class='error' *ngIf='(lastName.touched || clickedInactiveButton) && lastName.invalid'>*Last name is required</div>
+    <div class='error' *ngIf='(email.touched || clickedInactiveButton) && email.invalid && email.pristine'>*Email is required</div>
+    <div class='error' *ngIf='(email.touched || clickedInactiveButton) && email.invalid && email.dirty'>*Invalid email</div>
 </form>
